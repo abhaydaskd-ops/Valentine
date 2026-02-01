@@ -26,19 +26,18 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
 
+    img {
+      width: 150px;
+      margin-bottom: 15px;
+    }
+
     h1 {
       color: #ff4d6d;
-      margin-bottom: 10px;
     }
 
     p {
       color: #555;
       font-size: 16px;
-    }
-
-    img {
-      width: 150px;
-      margin-bottom: 15px;
     }
 
     button {
@@ -47,35 +46,32 @@
       border-radius: 30px;
       font-size: 18px;
       cursor: pointer;
-      transition: 0.3s;
+      margin: 8px 0;
+    }
+
+    .option {
+      width: 100%;
+      background: #ffe6eb;
     }
 
     #yes {
       background: #ff4d6d;
       color: white;
-      margin-right: 10px;
     }
 
     #no {
-      background: #eee;
+      background: #ddd;
       position: absolute;
     }
 
     .btns {
       margin-top: 20px;
       position: relative;
-      height: 60px;
+      height: 80px;
     }
 
     .hidden {
       display: none;
-    }
-
-    .quiz button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      background: #ffe6eb;
     }
   </style>
 </head>
@@ -84,62 +80,105 @@
   <div class="container">
 
     <!-- GIF -->
-    <img src="https://media.tenor.com/6xJ9s6ZC0uQAAAAC/mochi.gif" alt="mochi">
+    <img id="gif" src="https://media.tenor.com/6xJ9s6ZC0uQAAAAC/mochi.gif">
 
-    <h1>Anjana 💕</h1>
-    <p>Think about it properly… don’t say “No” so quickly 🙄</p>
+    <h1 id="title">Hi Anjana 💕</h1>
+    <p id="text">Before anything… answer a few questions 😌</p>
 
-    <!-- QUIZ GAME -->
-    <div class="quiz" id="quiz">
-      <h3>Mini Game 🎮</h3>
-      <p>How well do you know Abhay?</p>
-
-      <button onclick="wrong()">He is boring 😐</button>
-      <button onclick="right()">He acts tough but is actually soft 🥹</button>
-      <button onclick="wrong()">He has no heart 🤡</button>
+    <!-- QUESTIONS -->
+    <div id="quiz">
+      <button class="option" onclick="nextQuestion(true)">
+        He cares deeply, even if he doesn’t show it 🥹
+      </button>
+      <button class="option" onclick="nextQuestion(false)">
+        He is cold and emotionless 😐
+      </button>
     </div>
 
     <!-- PROPOSAL -->
-    <div class="hidden" id="proposal">
-      <h2>Anjana… 💖</h2>
-      <p>Will you be my Valentine?</p>
+    <div id="proposal" class="hidden">
+      <p>Now the real question… 💖</p>
+      <h2>Will you be my Valentine?</h2>
 
       <div class="btns">
         <button id="yes" onclick="yesClicked()">Yes 💕</button>
-        <button id="no">No 🙄</button>
+        <button id="no" onclick="noClicked()">No 🙄</button>
       </div>
     </div>
 
     <!-- FINAL -->
-    <div class="hidden" id="final">
+    <div id="final" class="hidden">
+      <img src="https://media.tenor.com/j1g5cZzQ8SAAAAAC/mochi-love.gif">
       <h1>YAYYY 😭❤️</h1>
-      <p>Anjana, you just made Abhay the happiest person ever 💘</p>
+      <p>You just made Abhay the happiest person ever 💘</p>
     </div>
 
   </div>
 
   <script>
-    function wrong() {
-      alert("Wrong 😏 Try again!");
+    let step = 0;
+    let noMode = false;
+
+    const questions = [
+      {
+        title: "Question 1 💭",
+        text: "What kind of person is Abhay?",
+        correct: true
+      },
+      {
+        title: "Question 2 💖",
+        text: "Does he overthink everything?",
+        correct: true
+      },
+      {
+        title: "Question 3 😌",
+        text: "Is he serious about you?",
+        correct: true
+      }
+    ];
+
+    function nextQuestion(correct) {
+      if (!correct) {
+        alert("Wrong 😏 Try again!");
+        return;
+      }
+
+      step++;
+
+      if (step < questions.length) {
+        document.getElementById("title").innerText = questions[step].title;
+        document.getElementById("text").innerText = questions[step].text;
+      } else {
+        document.getElementById("quiz").classList.add("hidden");
+        document.getElementById("proposal").classList.remove("hidden");
+        document.getElementById("gif").src =
+          "https://media.tenor.com/Qw8n3YHq4iUAAAAC/mochi-please.gif";
+      }
     }
 
-    function right() {
-      document.getElementById("quiz").classList.add("hidden");
-      document.getElementById("proposal").classList.remove("hidden");
+    function noClicked() {
+      noMode = true;
+      moveNo();
     }
 
-    const noBtn = document.getElementById("no");
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 200 - 100;
+    function moveNo() {
+      if (!noMode) return;
+
+      const noBtn = document.getElementById("no");
+      const x = Math.random() * 250 - 125;
+      const y = Math.random() * 120 - 60;
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
+    }
+
+    document.addEventListener("mousemove", moveNo);
 
     function yesClicked() {
       document.getElementById("proposal").classList.add("hidden");
       document.getElementById("final").classList.remove("hidden");
+      document.getElementById("gif").style.display = "none";
     }
   </script>
 </body>
 </html>
+
   

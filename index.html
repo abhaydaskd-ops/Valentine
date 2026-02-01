@@ -24,6 +24,8 @@
       width: 90%;
       max-width: 420px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
     }
 
     img {
@@ -67,7 +69,7 @@
     .btns {
       margin-top: 20px;
       position: relative;
-      height: 80px;
+      height: 90px;
     }
 
     .hidden {
@@ -79,30 +81,35 @@
 <body>
   <div class="container">
 
-    <!-- GIF -->
     <img id="gif" src="https://media.tenor.com/6xJ9s6ZC0uQAAAAC/mochi.gif">
 
     <h1 id="title">Hi Anjana 💕</h1>
-    <p id="text">Before anything… answer a few questions 😌</p>
+    <p id="text">Answer honestly… 😌</p>
 
-    <!-- QUESTIONS -->
+    <!-- QUESTION AREA -->
     <div id="quiz">
-      <button class="option" onclick="nextQuestion(true)">
-        He cares deeply, even if he doesn’t show it 🥹
+      <button class="option" onclick="answerQ1(true)">
+        He pretends to be strong but is soft inside 🥹
       </button>
-      <button class="option" onclick="nextQuestion(false)">
-        He is cold and emotionless 😐
+      <button class="option" onclick="answerQ1(false)">
+        He has no emotions 😐
       </button>
+    </div>
+
+    <!-- YES / NO QUESTIONS -->
+    <div id="yesNo" class="hidden">
+      <button id="yes" onclick="nextYes()">Yes</button>
+      <button onclick="wrong()">No</button>
     </div>
 
     <!-- PROPOSAL -->
     <div id="proposal" class="hidden">
-      <p>Now the real question… 💖</p>
+      <p>Okay… the most important question 💖</p>
       <h2>Will you be my Valentine?</h2>
 
       <div class="btns">
         <button id="yes" onclick="yesClicked()">Yes 💕</button>
-        <button id="no" onclick="noClicked()">No 🙄</button>
+        <button id="no">No 🙄</button>
       </div>
     </div>
 
@@ -116,61 +123,50 @@
   </div>
 
   <script>
-    let step = 0;
-    let noMode = false;
+    let step = 1;
+    const title = document.getElementById("title");
+    const text = document.getElementById("text");
 
-    const questions = [
-      {
-        title: "Question 1 💭",
-        text: "What kind of person is Abhay?",
-        correct: true
-      },
-      {
-        title: "Question 2 💖",
-        text: "Does he overthink everything?",
-        correct: true
-      },
-      {
-        title: "Question 3 😌",
-        text: "Is he serious about you?",
-        correct: true
-      }
-    ];
-
-    function nextQuestion(correct) {
+    function answerQ1(correct) {
       if (!correct) {
         alert("Wrong 😏 Try again!");
         return;
       }
+      step = 2;
+      title.innerText = "Question 2 💭";
+      text.innerText = "Does Abhay overthink everything?";
+      document.getElementById("quiz").classList.add("hidden");
+      document.getElementById("yesNo").classList.remove("hidden");
+    }
 
-      step++;
-
-      if (step < questions.length) {
-        document.getElementById("title").innerText = questions[step].title;
-        document.getElementById("text").innerText = questions[step].text;
+    function nextYes() {
+      if (step === 2) {
+        step = 3;
+        title.innerText = "Question 3 💖";
+        text.innerText = "Is he serious about you?";
       } else {
-        document.getElementById("quiz").classList.add("hidden");
+        document.getElementById("yesNo").classList.add("hidden");
         document.getElementById("proposal").classList.remove("hidden");
         document.getElementById("gif").src =
           "https://media.tenor.com/Qw8n3YHq4iUAAAAC/mochi-please.gif";
       }
     }
 
-    function noClicked() {
-      noMode = true;
-      moveNo();
+    function wrong() {
+      alert("Nope 😌 Try again!");
     }
 
-    function moveNo() {
-      if (!noMode) return;
+    /* FLOATING NO BUTTON (ONLY AT PROPOSAL) */
+    const noBtn = document.getElementById("no");
 
-      const noBtn = document.getElementById("no");
-      const x = Math.random() * 250 - 125;
+    function moveNo() {
+      const x = Math.random() * 260 - 130;
       const y = Math.random() * 120 - 60;
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    document.addEventListener("mousemove", moveNo);
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
 
     function yesClicked() {
       document.getElementById("proposal").classList.add("hidden");
@@ -180,5 +176,3 @@
   </script>
 </body>
 </html>
-
-  
